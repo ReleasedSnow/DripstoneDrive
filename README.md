@@ -10,3 +10,6 @@ DripstoneDash:
 - Damage = how much damage the hit entities will recieve
 - Knockback = the power of the knockback applied to hit entities
 - sourceRange = the range at which the player can source the move
+- TrailBlockRadius = the radius of the trail that spawns below the spikes
+- GrowthDelay = the delay between growth of each spike
+- 
