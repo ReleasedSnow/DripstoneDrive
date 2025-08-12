@@ -47,11 +47,11 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     private List<Entity> hitEntities = new ArrayList<>();
 
     private final int maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.Range");
-    private final long lingerDuration = 3500;
-    private final double growthDelay = 0;
-    private final double damage = 2;
-    private final double knockup = 2;
-    private final int trailBlocksRadius = 2;
+    private final long lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDash.LingerDuration");
+    private final double growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.GrowthDelay");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Damage");
+    private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Knockup");
+    private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.TrailBlockRadius");
 
     public DripstoneDash(Player player) {
         super(player);
@@ -63,7 +63,6 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
         if (source == null) {
             return;
         }
-
 
         this.origin = source.getLocation();
         focusBlock(source);
