@@ -52,6 +52,7 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     private final double damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Damage");
     private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Knockup");
     private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.TrailBlockRadius");
+    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDash.Cooldown");
 
     public DripstoneDash(Player player) {
         super(player);
@@ -272,21 +273,20 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
         return false;
     }
 
-    @Override
-    public double getCollisionRadius() {
-        return 2;
-    }
-
     @Override public boolean isCollidable() {
         return true;
     }
     @Override public boolean isSneakAbility() { return true; }
     @Override public boolean isHarmlessAbility() { return false; }
-    @Override public long getCooldown() { return 4000; }
+    @Override public long getCooldown() { return cooldown; }
     @Override public String getName() { return "DripstoneDash"; }
     @Override public Location getLocation() { return null; }
     @Override public void load() {}
     @Override public void stop() {}
     @Override public String getAuthor() { return "ReleasedSnow"; }
     @Override public String getVersion() { return "1.0.1"; }
+
+    @Override public String getDescription() {return "Summon sharp spikes of dripstone from the earth, increasing in height as they travel and damaging any enemies in the way!";}
+
+    @Override public String getInstructions() {return "EarthBlast: LeftClick 2x -> Shockwave: Sneak";}
 }

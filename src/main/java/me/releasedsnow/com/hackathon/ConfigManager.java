@@ -29,6 +29,7 @@ public class ConfigManager {
         config.addDefault(path + "Damage", 2);
         config.addDefault(path + "Knockup", 2);
         config.addDefault(path + "TrailBlockRadius", 2);
+        config.addDefault(path + "Cooldown", 8000);
 
 
 
