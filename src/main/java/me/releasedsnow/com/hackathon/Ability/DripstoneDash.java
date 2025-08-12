@@ -1,9 +1,7 @@
 package me.releasedsnow.com.hackathon.Ability;
 
-import com.google.common.base.Predicates;
 import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.*;
-import com.projectkorra.projectkorra.ability.util.Collision;
 import com.projectkorra.projectkorra.ability.util.ComboManager;
 import com.projectkorra.projectkorra.util.ClickType;
 import com.projectkorra.projectkorra.util.DamageHandler;
@@ -15,20 +13,18 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.PointedDripstone;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public final class DripstoneDash extends EarthAbility implements AddonAbility, ComboAbility {
 
     private Location origin;
-    private Vector direction;
 
     private int step = 0;
 
@@ -53,6 +49,7 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Knockup");
     private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.TrailBlockRadius");
     private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDash.Cooldown");
+    private final double sourceRange = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.sourceRange");
 
     public DripstoneDash(Player player) {
         super(player);
@@ -88,7 +85,7 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
         long now = System.currentTimeMillis();
 
         if (currentSpike == null && step < maxSteps) {
-            this.direction = player.getLocation().getDirection().setY(0).normalize();
+            Vector direction = player.getLocation().getDirection().setY(0).normalize();
 
 
             Location base;
@@ -206,7 +203,7 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
                 if (!TempBlock.isTempBlock(surrounding.getBlock())) {
                     TempBlock block = new TempBlock(surrounding.getBlock() , chosen);
                     currentSpike.tempBlocks.add(block);
-                    surrounding.getWorld().spawnParticle(Particle.BLOCK_CRACK, surrounding, 10, .2, .2, .2, 0.05, block.getBlockData());
+                    Objects.requireNonNull(surrounding.getWorld()).spawnParticle(Particle.BLOCK_CRACK, surrounding, 10, .2, .2, .2, 0.05, block.getBlockData());
                 }
             }
         }

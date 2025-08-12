@@ -16,9 +16,11 @@ public class ConfigManager {
         return config;
     }
 
-    private void deathMessages(){
+    private void deathMessages() {
+        com.projectkorra.projectkorra.configuration.ConfigManager.languageConfig.get().addDefault("Abilities.Earth.DripstoneDash.DeathMessage", "{victim} was impaled by {attacker}'s {ability}");
 
     }
+
 
     public void defaults(){
         FileConfiguration config = getConfig();
@@ -30,6 +32,7 @@ public class ConfigManager {
         config.addDefault(path + "Knockup", 2);
         config.addDefault(path + "TrailBlockRadius", 2);
         config.addDefault(path + "Cooldown", 8000);
+        config.addDefault(path + "SourceRange", 5);
 
 
 
