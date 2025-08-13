@@ -42,14 +42,14 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     private List<Block> allSpikeBlocks =  new ArrayList<>();
     private List<Entity> hitEntities = new ArrayList<>();
 
-    private final int maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.Range");
-    private final long lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDash.LingerDuration");
-    private final double growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.GrowthDelay");
-    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Damage");
-    private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.Knockup");
-    private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDash.TrailBlockRadius");
-    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDash.Cooldown");
-    private final double sourceRange = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDash.sourceRange");
+    private final int maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.Range");
+    private final long lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.LingerDuration");
+    private final double growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.GrowthDelay");
+    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Damage");
+    private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Knockup");
+    private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.TrailBlockRadius");
+    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.Cooldown");
+    private final double sourceRange = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.sourceRange");
 
     public DripstoneDash(Player player) {
         super(player);

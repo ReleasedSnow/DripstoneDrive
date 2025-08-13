@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.releasedsnow.com</groupId>
-    <artifactId>Earthbending-Pack</artifactId>
+    <artifactId>DripstoneDrive</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>EarthbendingPack</name>
+    <name>DripstoneDrive</name>
 
     <properties>
         <java.version>1.8</java.version>

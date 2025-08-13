@@ -17,14 +17,14 @@ public class ConfigManager {
     }
 
     private void deathMessages() {
-        com.projectkorra.projectkorra.configuration.ConfigManager.languageConfig.get().addDefault("Abilities.Earth.DripstoneDash.DeathMessage", "{victim} was impaled by {attacker}'s {ability}");
+        com.projectkorra.projectkorra.configuration.ConfigManager.languageConfig.get().addDefault("Abilities.Earth.DripstoneDrive.DeathMessage", "{victim} was impaled by {attacker}'s {ability}");
 
     }
 
 
     public void defaults(){
         FileConfiguration config = getConfig();
-        String path = "Abilities.Earth.DripstoneDrive";
+        String path = "Abilities.Earth.DripstoneDrive.";
         config.addDefault(path + "Range", 8);
         config.addDefault(path + "LingerDuration", 3500);
         config.addDefault(path + "SpikeGrowthDelay", 0);
