@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public final class DripstoneDash extends EarthAbility implements AddonAbility, ComboAbility {
+public final class DripstoneDrive extends EarthAbility implements AddonAbility, ComboAbility {
 
     private Location origin;
 
@@ -42,22 +42,35 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     private List<Block> allSpikeBlocks =  new ArrayList<>();
     private List<Entity> hitEntities = new ArrayList<>();
 
-    private final int maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.Range");
-    private final long lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.LingerDuration");
-    private final double growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.GrowthDelay");
-    private final double damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Damage");
-    private final double knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Knockup");
-    private final int trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.TrailBlockRadius");
-    private final long cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.Cooldown");
-    private final double sourceRange = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.sourceRange");
+    private final int maxSteps;
+    private final long lingerDuration;
+    private final double growthDelay;
+    private final double damage;
+    private final double knockup;
+    private final int trailBlocksRadius;
+    private final long cooldown;
+    private final double sourceRange;
 
-    public DripstoneDash(Player player) {
+    public DripstoneDrive(Player player) {
         super(player);
+        maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.Range");
+        lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.LingerDuration");
+        growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.GrowthDelay");
+        damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Damage");
+        knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Knockup");
+        trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.TrailBlockRadius");
+        cooldown = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.Cooldown");
+        sourceRange = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.SourceRange");
+
+
         if (!bPlayer.canBendIgnoreBinds(this)) {
-        remove();
+            remove();
             return;
         }
-        Block source = getEarthSourceBlock(5);
+
+        System.out.println(sourceRange);
+        System.out.println(maxSteps);
+        Block source = getEarthSourceBlock(sourceRange);
         if (source == null) {
             return;
         }
@@ -66,7 +79,6 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
         focusBlock(source);
         start();
     }
-
     @Override
     public void remove() {
         destroyAllPillars();
@@ -86,7 +98,6 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
 
         if (currentSpike == null && step < maxSteps) {
             Vector direction = player.getLocation().getDirection().setY(0).normalize();
-
 
             Location base;
             if (lastSpike == null) {
@@ -119,7 +130,6 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
             currentSpike.currentHeight++;
             createStalagmite(currentSpike.base, currentSpike.currentHeight, currentSpike.maxHeight);
             createEffects(currentSpike.base);
-
             checkCollision(currentSpike.base, currentSpike.currentHeight);
 
             if (currentSpike.currentHeight >= currentSpike.maxHeight) {
@@ -198,8 +208,8 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
         if (isEarthbendable(baseBelow)) {
             for (Location surrounding : GeneralMethods.getCircle(baseBelow.getLocation(),trailBlocksRadius, 1, false, false, 0)) {
                 if (!surrounding.getBlock().getRelative(BlockFace.UP).isPassable()) continue;
-                if (Math.random() >= .8) continue;
-                Random random = new Random();Material chosen = options[random.nextInt(options.length)];
+                Random random = new Random();
+                Material chosen = options[random.nextInt(options.length)];
                 if (!TempBlock.isTempBlock(surrounding.getBlock())) {
                     TempBlock block = new TempBlock(surrounding.getBlock() , chosen);
                     currentSpike.tempBlocks.add(block);
@@ -232,7 +242,7 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
 
     @Override
     public Object createNewComboInstance(Player player) {
-        return new DripstoneDash(player);
+        return new DripstoneDrive(player);
     }
 
     @Override
@@ -276,9 +286,12 @@ public final class DripstoneDash extends EarthAbility implements AddonAbility, C
     @Override public boolean isSneakAbility() { return true; }
     @Override public boolean isHarmlessAbility() { return false; }
     @Override public long getCooldown() { return cooldown; }
-    @Override public String getName() { return "DripstoneDash"; }
+    @Override public String getName() { return "DripstoneDrive"; }
     @Override public Location getLocation() { return null; }
-    @Override public void load() {}
+    @Override public void load() {
+
+
+    }
     @Override public void stop() {}
     @Override public String getAuthor() { return "ReleasedSnow"; }
     @Override public String getVersion() { return "1.0.1"; }

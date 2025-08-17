@@ -9,6 +9,7 @@ public class Plugin extends JavaPlugin {
 
     @Override
     public void onEnable(){
+        System.out.println("helllllloooo");
         plugin = this;
         new ConfigManager();
         CoreAbility.registerPluginAbilities(plugin, "me.releasedsnow.com.hackathon.Ability");
