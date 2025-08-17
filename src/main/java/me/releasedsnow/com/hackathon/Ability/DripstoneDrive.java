@@ -29,7 +29,6 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
     private int step = 0;
 
     private Spike currentSpike = null;
-    private long lastGrowthTime = 0;
 
     private Spike lastSpike = null;
     private boolean finishedAllPillars = false;
@@ -44,7 +43,6 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
 
     private final int maxSteps;
     private final long lingerDuration;
-    private final double growthDelay;
     private final double damage;
     private final double knockup;
     private final int trailBlocksRadius;
@@ -55,7 +53,6 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
         super(player);
         maxSteps = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.Range");
         lingerDuration = ConfigManager.getConfig().getLong("Abilities.Earth.DripstoneDrive.LingerDuration");
-        growthDelay = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.GrowthDelay");
         damage = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Damage");
         knockup = ConfigManager.getConfig().getDouble("Abilities.Earth.DripstoneDrive.Knockup");
         trailBlocksRadius = ConfigManager.getConfig().getInt("Abilities.Earth.DripstoneDrive.TrailBlockRadius");
@@ -64,12 +61,10 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
 
 
         if (!bPlayer.canBendIgnoreBinds(this)) {
-            remove();
+            removeWithCooldown();
             return;
         }
 
-        System.out.println(sourceRange);
-        System.out.println(maxSteps);
         Block source = getEarthSourceBlock(sourceRange);
         if (source == null) {
             return;
@@ -78,11 +73,17 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
         this.origin = source.getLocation();
         focusBlock(source);
         start();
+        bPlayer.addCooldown(this, getCooldown());
     }
     @Override
     public void remove() {
         destroyAllPillars();
+        super.remove();
+    }
+
+    public void removeWithCooldown() {
         bPlayer.addCooldown(this, getCooldown());
+        destroyAllPillars();
         super.remove();
     }
 
@@ -90,11 +91,10 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
     @Override
     public void progress() {
         if (!player.isOnline() || player.isDead()) {
-            remove();
+            removeWithCooldown();
             return;
         }
 
-        long now = System.currentTimeMillis();
 
         if (currentSpike == null && step < maxSteps) {
             Vector direction = player.getLocation().getDirection().setY(0).normalize();
@@ -112,9 +112,8 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
             }else {
                 Location nextLoc = lastSpike.base.clone().add(direction.clone());
                 Block nextBlock = GeneralMethods.getTopBlock(nextLoc, 3, -3);
-
-                if (nextBlock == null || !isEarthbendable(nextBlock)) {
-                    step ++;
+                if (!isEarthbendable(nextBlock) || TempBlock.isTempBlock(nextBlock)) {
+                    remove();
                     return;
                 }
                 base = nextBlock.getLocation().add(0,1,0);
@@ -122,11 +121,9 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
             int height = step + 1;
             currentSpike = new Spike(base, 0, height);
             allSpikes.add(currentSpike);
-            lastGrowthTime = now;
         }
 
-        if (currentSpike != null && now - lastGrowthTime >= growthDelay) {
-            lastGrowthTime = now;
+        if (currentSpike != null) {
             currentSpike.currentHeight++;
             createStalagmite(currentSpike.base, currentSpike.currentHeight, currentSpike.maxHeight);
             createEffects(currentSpike.base);
@@ -260,13 +257,12 @@ public final class DripstoneDrive extends EarthAbility implements AddonAbility, 
 
     private void checkCollision(Location base, int height) {
         for (int i = 0; i < height; ++i) {
-            Location location = base.clone().add(0.0, i, 0.0);
+            Location location = base.clone().add(0, i, 0);
             for (Entity entity : GeneralMethods.getEntitiesAroundPoint(location, 1.5)) {
                 if (!hitEntities.contains(entity)) {
                     if (entity.equals(this.player) || !(entity instanceof LivingEntity)) continue;
-                    Vector knockback = new Vector(0.0, knockup, 0.0);
-                    entity.setVelocity(entity.getVelocity().multiply(knockback));
                     DamageHandler.damageEntity(entity, this.player, damage, this);
+                    entity.setVelocity(entity.getVelocity().multiply(new Vector(0, knockup, 0)));
                     hitEntities.add(entity);
                 }
             }
